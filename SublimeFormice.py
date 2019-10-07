@@ -35,8 +35,9 @@ class TFM:
 	def __init__(self):
 		try:
 			self.settings = sublime.load_settings("SublimeFormice.sublime-setting")
-			self.transformice_api_data = sublime.load_settings(self.settings.get("language") + "-SublimeFormice.sublime-language")		
-		except: pass
+			self.transformice_api_data = sublime.load_settings(self.settings.get("language", "en") + "-SublimeFormice.sublime-language")
+		except Exception as e:
+			print(e)
 		if self.transformice_api_data != "":
 			list_of_func = get_json(self.transformice_api_data.get("functions"))
 			for function_name in list_of_func:
@@ -47,12 +48,12 @@ class TFM:
 					print("Unknown type: %s" % list_of_func[function_name])
 				else:
 					if list_of_func[function_name]["type"] == "function":
-						self.add_function(function_name, list_of_func[function_name])		
+						self.add_function(function_name, list_of_func[function_name])
 					if list_of_func[function_name]["type"] == "method":
-						self.add_method(function_name, list_of_func[function_name])	
+						self.add_method(function_name, list_of_func[function_name])
 
 	def add_function(self, function_name, language_string):
-		self.transformice_func.append( Funct( function_name, language_string ) )	
+		self.transformice_func.append( Funct( function_name, language_string ) )
 
 	def add_object(self, function_name, language_string):
 		self.transformice_obj.append( Obj( function_name, language_string ) )
@@ -67,18 +68,28 @@ class TFM:
 		for function_name in self.transformice_func:
 			if word in function_name.name:
 				method_str_to_append = function_name.name + '(' + function_name.arguments+ ')'
-				method_file_location = function_name.description;
-				autocomplete_list.append(("{0:70}\t{0}".format(method_str_to_append, method_file_location),method_str_to_append)) 		
+				method_file_location = function_name.description
+				autocomplete_list.append(("{0:70}\t{0}".format(method_str_to_append, method_file_location),method_str_to_append))
 		for function_name in self.transformice_methods:
 			if word in function_name.name:
 				method_str_to_append = function_name.name
 				method_file_location = function_name.description
-				autocomplete_list.append(("{0:70}\t{1}".format(method_str_to_append, method_file_location),method_str_to_append)) 		
-													
-		return autocomplete_list	
+				autocomplete_list.append(("{0:70}\t{1}".format(method_str_to_append, method_file_location),method_str_to_append))
 
-def is_lua(filename):
-	return '.lua' in filename
+		return autocomplete_list
+
+def is_lua(view, position=None):
+	if view is None:
+		return False
+
+	# get the position of the carret
+	if position is None:
+		try:
+			position = view.sel()[0].begin()
+		except:
+			return False
+
+	return view.match_selector(position, 'source.lua')
 
 def get_json(s_string):
 	return json.loads(json.dumps(s_string))
@@ -87,9 +98,8 @@ def get_json(s_string):
 class SublimeFormiceEvent(TFM, sublime_plugin.EventListener):
 
 	def on_query_completions(self, view, prefix, locations):
-		curr_file = view.file_name()
 		completions = []
-		if is_lua(curr_file):
+		if is_lua(view, position=locations[0] if len(locations) else None):
 			return self.get_autocomplete(prefix)
 			completions.sort()
 		return (completions,sublime.INHIBIT_EXPLICIT_COMPLETIONS)
