@@ -1,364 +1,396 @@
 {
-    "functions" : {
-        "print" : {
-            "description" : "Print something.",
-            "args" : "something",
-            "type" : "function"
-        },
-        "system.exit" : {
-            "description" : "Deactivates the Lua script running.",
-            "args" : "",
-            "type" : "function"
-        },
-        "system.newTimer" : {
-            "description" : "Create a new timer. Return the new timer id. Use system.removeTimer(timerId) to stop a timer.",
-            "args" : "callback, time, loop, arg1, arg2, arg3, arg4",
-            "type" : "function"
-        },
-        "system.giveEventGift" : {
-            "description" : "Gives an event reward to the targeted player.",
-            "args" : "playerName, giftCode",
-            "type" : "function"
-        },
-        "system.removeTimer" : {
-            "description" : "Remove a timer.",
-            "args" : "timerId",
-            "type" : "function"
-        },
-        "system.loadFile" : {
-            "description" : "Load a file. Call limited to once per 10 minutes. Returns true if loading has started.",
-            "args" : "fileNumber",
-            "type" : "function"
-        },
-        "system.saveFile" : {
-            "description" : "Save a file. Call limited to once per 10 minutes. Returns true if saving has started.",
-            "args" : "data, fileNumber",
-            "type" : "function"
-        },
-        "system.loadPlayerData" : {
-            "description" : "Loads the player's data for this module. Calls eventPlayerData when it's done.",
-            "args" : "playerName",
-            "type" : "function"
-        },
-        "system.savePlayerData" : {
-            "description" : "Saves the player's data for this module.",
-            "args" : "playerName, data",
-            "type" : "function"
-        },
-        "system.disableChatCommandDisplay" : {
-            "description" : "Deactivates the display of a command in the chat window (100 max).",
-            "args" : "command, activate",
-            "type" : "function"
-        },      
-        "system.bindMouse" : {
-            "description" : "Listens to the player's mouse events.",
-            "args" : "playerName, active",
-            "type" : "function"
-        },
-        "debug.disableEventLog" : {
-            "description" : "Enables or deactivates the events log.",
-            "args" : "yes",
-            "type" : "function"
-        },
-        "debug.disableTimerLog" : {
-            "description" : "Enables or deactivates the timers log.",
-            "args" : "yes",
-            "type" : "function"
-        },
-        "tfm.exec.disableDebugCommand" : {
-            "description" : "Disables the effects of the /debug command.",
-            "args" : "activate",
-            "type" : "function"
-        },    
-        "tfm.exec.disableMinimalistMode" : {
-            "description" : "Disables the minimalist mode.",
-            "args" : "activate",
-            "type" : "function"
-        },      
-        "tfm.exec.disableMortCommand" : {
-            "description" : "Disables the /mort command.",
-            "args" : "activate",
-            "type" : "function"
-        },      
-        "tfm.exec.disableWatchCommand" : {
-            "description" : "Disables the effects of the /watch command.",
-            "args" : "activate",
-            "type" : "function"
-        },      
-        "tfm.exec.addImage" : {
-            "description" : "Add an image to the map.",
-            "args" : "imageId, target, xPosition, yPosition, targetPlayer",
-            "type" : "function"
-        },  
-        "tfm.exec.removeImage" : {
-            "description" : "Remove an image.",
-            "args" : "imageId",
-            "type" : "function"
-        },
-        "ui.addPopup" : {
-            "description" : "Add a popup. Popup type : 0 (simple), 1 (yes or no), 2 (player input). If targetPlayer is NIL, it sends it to all players.",
-            "args" : "id, type, text, targetPlayer, x, y, width, fixedPos",
-            "type" : "function"
-        },
-        "ui.addTextArea" : {
-            "description" : "Add a text area. If targetPlayer is NIL, it sends it to all players.",
-            "args" : "id, text, targetPlayer, x, y, width, height, backgroundColor, borderColor, backgroundAlpha, fixedPos",
-            "type" : "function"
-        },
-        "ui.updateTextArea" : {
-            "description" : "Update a text area. If targetPlayer is NIL, it sends it to all players.",
-            "args" : "id, text, targetPlayer",
-            "type" : "function"
-        },
-        "ui.removeTextArea" : {
-            "description" : "Remove a text area. If targetPlayer is NIL, it sends it to all players.",
-            "args" : "id, targetPlayer",
-            "type" : "function"
-        },
-        " ui.showColorPicker" : {
-            "description" : "Displays a color picker.",
-            "args" : "id, targetPlayer, deaultColor, title",
-            "type" : "function"
-        },
-        "tfm.exec.addConjuration" : {
-            "description" : "Add conjuration to the map.",
-            "args" : "xPosition, yPosition, duration",
-            "type" : "function"
-        },
-        "tfm.exec.addShamanObject" : {
-            "description" : "Adds a Shaman object into the game.",
-            "args" : "objectId, xPosition, yPosition, angle, xSpeed, ySpeed, ghost",
-            "type" : "function"
-        },
-        "tfm.exec.bindKeyboard" : {
-            "description" : "Listens to the player's keyboard events.",
-            "args" : "playerName, keyCode, down, activate",
-            "type" : "function"
-        },
-        "tfm.exec.chatMessage" : {
-            "description" : "Sends a message to all the players in the room. If playerName isn't NIL, the message is sent to this player only.",
-            "args" : "message, playerName",
-            "type" : "function"
-        },
-        "tfm.exec.disableAfkDeath" : {
-            "description" : "Desactivates the automatic afk death.",
-            "args" : "activate",
-            "type" : "function"
-        },
-        "tfm.exec.disableAllShamanSkills" : {
-            "description" : "Desactivates all shaman skills.",
-            "args" : "activate",
-            "type" : "function"
-        },
-        "tfm.exec.disableAutoNewGame" : {
-            "description" : "Deactivates the automatic renewal of rounds.",
-            "args" : "activate",
-            "type" : "function"
-        },
-        "tfm.exec.disableAutoScore" : {
-            "description" : "Deactivates the automatic scoring management.",
-            "args" : "activate",
-            "type" : "function"
-        },
-        "tfm.exec.disableAutoShaman" : {
-            "description" : "Deactivates the automatic selection of Shaman.",
-            "args" : "activate",
-            "type" : "function"
-        },
-        "tfm.exec.disableAutoTimeLeft" : {
-            "description" : "Deactivates the automatic time change.",
-            "args" : "activate",
-            "type" : "function"
-        },
-        "tfm.exec.displayParticle" : {
-            "description" : "Add a particle. If targetPlayer is NIL, it sends it to all players.",
-            "args" : "particleId, xPosition, yPosition, xSpeed, ySpeed, xAcceleration, yAcceleration, targetPlayer",
-            "type" : "function"
-        },
-        "tfm.exec.explosion" : {
-            "description" : "Throw an explosion.",
-            "args" : "xPosition, yPosition, power, distance, miceOnly",
-            "type" : "function"
-        },
-        "tfm.exec.giveCheese" : {
-            "description" : "Gives the cheese to a player.",
-            "args" : "playerName",
-            "type" : "function"
-        },
-        "tfm.exec.giveMeep" : {
-            "description" : "Gives the meep competence to a player.",
-            "args" : "playerName",
-            "type" : "function"
-        },
-        "tfm.exec.giveConsumables" : {
-            "description" : "Gives consumables to the targeted player.",
-            "args" : "playerName, consumableId, amount",
-            "type" : "function"
-        },
-        "tfm.exec.killPlayer" : {
-            "description" : "Kills the selected player.",
-            "args" : "playerName",
-            "type" : "function"
-        },
-        "tfm.exec.moveObject" : {
-            "description" : "Defines the speed and position of an object.",
-            "args" : "objectId, xPosition, yPosition, positionOffset, xSpeed, ySpeed, speedOffset, angle, angleOffset",
-            "type" : "function"
-        },
-        "tfm.exec.movePlayer" : {
-            "description" : "Defines the speed and position of a player.",
-            "args" : "playerName, xPosition, yPosition, positionOffset, xSpeed, ySpeed, speedOffset",
-            "type" : "function"
-        },
-        "tfm.exec.newGame" : {
-            "description" : "Launch a new game. Use : 6 (vanilla map), @42583 (editor map), *#4 (perm category map), begin with '<' (xml map)",
-            "args" : "mapCode, flipped",
-            "type" : "function"
-        },
-        "tfm.exec.playerVictory" : {
-            "description" : "Gives the victory to a player.",
-            "args" : "playerName",
-            "type" : "function"
-        },
-        "tfm.exec.removeObject" : {
-            "description" : "Remove a shaman object.",
-            "args" : "objectId",
-            "type" : "function"
-        },
-        "tfm.exec.removePhyschicObject" : {
-            "description" : "Remove a physical object.",
-            "args" : "objectId",
-            "type" : "function"
-        },
-        "tfm.exec.respawnPlayer" : {
-            "description" : "Respawn a player.",
-            "args" : "playerName",
-            "type" : "function"
-        },
-        "tfm.exec.playEmote" : {
-            "description" : "Respawn a player.",
-            "args" : "playerName, emoteId, emoteArg",
-            "type" : "function"
-        },
-        "tfm.exec.lowerSyncDelay" : {
-            "description" : "Lowers the synchronization delay of a player to 400ms max.",
-            "args" : "playerName",
-            "type" : "function"
-        },
-        "tfm.exec.setGameTime" : {
-            "description" : "Set the game time.",
-            "args" : "seconds, init",
-            "type" : "function"
-        },
-        "tfm.exec.setNameColor" : {
-            "description" : "Changes the player's name's color.",
-            "args" : "playerName, color",
-            "type" : "function"
-        },
-        "tfm.exec.setPlayerScore" : {
-            "description" : "Set the player's score.",
-            "args" : "playerName, score, add",
-            "type" : "function"
-        },
-        "tfm.exec.setRoomMaxPlayers" : {
-            "description" : "Sets the max number of players in a room. 50 by default.",
-            "args" : "maxPlayers",
-            "type" : "function"
-        },
-        "tfm.exec.setRoomPassword" : {
-            "description" : "Password-protects a room.",
-            "args" : "password",
-            "type" : "function"
-        },
-        "tfm.exec.setShaman" : {
-            "description" : "Set a shaman.",
-            "args" : "playerName",
-            "type" : "function"
-        },
-        "tfm.exec.setAutoMapFlipMode" : {
-            "description" : "Sets whether the following maps should be flipped (always, never, or TFM's default behaviour).",
-            "args" : "activate",
-            "type" : "function"
-        },
-        "tfm.exec.setUIMapName" : {
-            "description" : "Set text map name.",
-            "args" : "text",
-            "type" : "function"
-        },
-        "tfm.exec.setUIShamanName" : {
-            "description" : "Set text shaman name.",
-            "args" : "text",
-            "type" : "function"
-        },
-        "tfm.exec.setVampirePlayer" : {
-            "description" : "Set player as vampire.",
-            "args" : "playerName",
-            "type" : "function"
-        },
-        "tfm.exec.snow" : {
-            "description" : "Makes the snow fall.",
-            "args" : "secondes, snowballPower",
-            "type" : "function"
-        },
-        "tfm.get.misc.bouboumVersion" : {
-            "description" : "Return bouboum version",
-            "args" : "",
-            "type" : "method"
-        },
-        "tfm.get.misc.transformiceVersion" : {
-            "description" : "Return transformice version",
-            "args" : "",
-            "type" : "method"
-        },
-        "tfm.get.misc.apiVersion" : {
-            "description" : "Return api version",
-            "args" : "",
-            "type" : "method"
-        },
-        "tfm.get.room.community" : {
-            "description" : "Return current community",
-            "args" : "",
-            "type" : "method"
-        },
-        "tfm.get.room.currentMap" : {
-            "description" : "Return current map",
-            "args" : "",
-            "type" : "method"
-        },
-        "tfm.get.room.maxPlayers" : {
-            "description" : "Return current players limit",
-            "args" : "",
-            "type" : "method"
-        },
-        "tfm.get.room.objectList" : {
-            "description" : "Return list of objects",
-            "args" : "",
-            "type" : "method"
-        },
-        "tfm.get.room.name" : {
-            "description" : "Return name",
-            "args" : "",
-            "type" : "method"
-        },
-        "tfm.get.room.playerList" : {
-            "description" : "Return list of players",
-            "args" : "",
-            "type" : "method"
-        },
-        "tfm.exec.addJoint": {
-            "description" : "Adds a joint between two physic objects",
-            "args" : "id, physicObject1, physicObject2, jointDef",
-            "type" : "function"
-        },
-        "tfm.exec.addPhysicObject": {
-            "description" : "Adds a physic object into the game",
-            "args" : "id, xPosition, yPosition, bodyDef",
-            "type" : "function"
-        },
-        "tfm.exec.disablePhysicalConsumables": {
-            "description" : "Deactivates physical consumables (like in racing and bootcamp rooms).",
-            "args" : "activate",
-            "type" : "function" 
-        }
-    }
+	"ui": {
+		"type": "package",
+		"name": "ui",
+		"content": {
+			"addPopup": {
+				"args": "id, type, text, targetPlayer, x, y, width, fixedPos",
+				"description": "Add a popup. Popup type : 0 (simple), 1 (yes or no), 2 (player input). If targetPlayer is NIL, it sends it to all players.",
+				"type": "function"
+			},
+			"addTextArea": {
+				"args": "id, text, targetPlayer, x, y, width, height, backgroundColor, borderColor, backgroundAlpha, fixedPos",
+				"description": "Add a text area. If targetPlayer is NIL, it sends it to all players.",
+				"type": "function"
+			},
+			"removeTextArea": {
+				"args": "id, targetPlayer",
+				"description": "Remove a text area. If targetPlayer is NIL, it sends it to all players.",
+				"type": "function"
+			},
+			"updateTextArea": {
+				"args": "id, text, targetPlayer",
+				"description": "Update a text area. If targetPlayer is NIL, it sends it to all players.",
+				"type": "function"
+			}
+		}
+	},
+	"debug": {
+		"type": "package",
+		"name": "debug",
+		"content": {
+			"disableEventLog": {
+				"args": "yes",
+				"description": "Enables or deactivates the events log.",
+				"type": "function"
+			},
+			"disableTimerLog": {
+				"args": "yes",
+				"description": "Enables or deactivates the timers log.",
+				"type": "function"
+			}
+		}
+	},
+	"print": {
+		"args": "something",
+		"description": "Print something.",
+		"type": "function"
+	},
+	"system": {
+		"type": "package",
+		"name": "system",
+		"content": {
+			"bindMouse": {
+				"args": "playerName, active",
+				"description": "Listens to the player's mouse events.",
+				"type": "function"
+			},
+			"disableChatCommandDisplay": {
+				"args": "command, activate",
+				"description": "Deactivates the display of a command in the chat window (100 max).",
+				"type": "function"
+			},
+			"exit": {
+				"args": "",
+				"description": "Deactivates the Lua script running.",
+				"type": "function"
+			},
+			"giveEventGift": {
+				"args": "playerName, giftCode",
+				"description": "Gives an event reward to the targeted player.",
+				"type": "function"
+			},
+			"loadFile": {
+				"args": "fileNumber",
+				"description": "Load a file. Call limited to once per 10 minutes. Returns true if loading has started.",
+				"type": "function"
+			},
+			"loadPlayerData": {
+				"args": "playerName",
+				"description": "Loads the player's data for this module. Calls eventPlayerData when it's done.",
+				"type": "function"
+			},
+			"newTimer": {
+				"args": "callback, time, loop, arg1, arg2, arg3, arg4",
+				"description": "Create a new timer. Return the new timer id. Use system.removeTimer(timerId) to stop a timer.",
+				"type": "function"
+			},
+			"removeTimer": {
+				"args": "timerId",
+				"description": "Remove a timer.",
+				"type": "function"
+			},
+			"saveFile": {
+				"args": "data, fileNumber",
+				"description": "Save a file. Call limited to once per 10 minutes. Returns true if saving has started.",
+				"type": "function"
+			},
+			"savePlayerData": {
+				"args": "playerName, data",
+				"description": "Saves the player's data for this module.",
+				"type": "function"
+			}
+		}
+	},
+	"tfm": {
+		"type": "package",
+		"name": "tfm",
+		"content": {
+			"exec": {
+				"type": "package",
+				"name": "exec",
+				"content": {
+					"addConjuration": {
+						"args": "xPosition, yPosition, duration",
+						"description": "Add conjuration to the map.",
+						"type": "function"
+					},
+					"addImage": {
+						"args": "imageId, target, xPosition, yPosition, targetPlayer",
+						"description": "Add an image to the map.",
+						"type": "function"
+					},
+					"addJoint": {
+						"args": "id, physicObject1, physicObject2, jointDef",
+						"description": "Adds a joint between two physic objects",
+						"type": "function"
+					},
+					"addPhysicObject": {
+						"args": "id, xPosition, yPosition, bodyDef",
+						"description": "Adds a physic object into the game",
+						"type": "function"
+					},
+					"addShamanObject": {
+						"args": "objectId, xPosition, yPosition, angle, xSpeed, ySpeed, ghost",
+						"description": "Adds a Shaman object into the game.",
+						"type": "function"
+					},
+					"bindKeyboard": {
+						"args": "playerName, keyCode, down, activate",
+						"description": "Listens to the player's keyboard events.",
+						"type": "function"
+					},
+					"chatMessage": {
+						"args": "message, playerName",
+						"description": "Sends a message to all the players in the room. If playerName isn't NIL, the message is sent to this player only.",
+						"type": "function"
+					},
+					"disableAfkDeath": {
+						"args": "activate",
+						"description": "Desactivates the automatic afk death.",
+						"type": "function"
+					},
+					"disableAllShamanSkills": {
+						"args": "activate",
+						"description": "Desactivates all shaman skills.",
+						"type": "function"
+					},
+					"disableAutoNewGame": {
+						"args": "activate",
+						"description": "Deactivates the automatic renewal of rounds.",
+						"type": "function"
+					},
+					"disableAutoScore": {
+						"args": "activate",
+						"description": "Deactivates the automatic scoring management.",
+						"type": "function"
+					},
+					"disableAutoShaman": {
+						"args": "activate",
+						"description": "Deactivates the automatic selection of Shaman.",
+						"type": "function"
+					},
+					"disableAutoTimeLeft": {
+						"args": "activate",
+						"description": "Deactivates the automatic time change.",
+						"type": "function"
+					},
+					"disableDebugCommand": {
+						"args": "activate",
+						"description": "Disables the effects of the /debug command.",
+						"type": "function"
+					},
+					"disableMinimalistMode": {
+						"args": "activate",
+						"description": "Disables the minimalist mode.",
+						"type": "function"
+					},
+					"disableMortCommand": {
+						"args": "activate",
+						"description": "Disables the /mort command.",
+						"type": "function"
+					},
+					"disablePhysicalConsumables": {
+						"args": "activate",
+						"description": "Deactivates physical consumables (like in racing and bootcamp rooms).",
+						"type": "function"
+					},
+					"disableWatchCommand": {
+						"args": "activate",
+						"description": "Disables the effects of the /watch command.",
+						"type": "function"
+					},
+					"displayParticle": {
+						"args": "particleId, xPosition, yPosition, xSpeed, ySpeed, xAcceleration, yAcceleration, targetPlayer",
+						"description": "Add a particle. If targetPlayer is NIL, it sends it to all players.",
+						"type": "function"
+					},
+					"explosion": {
+						"args": "xPosition, yPosition, power, distance, miceOnly",
+						"description": "Throw an explosion.",
+						"type": "function"
+					},
+					"giveCheese": {
+						"args": "playerName",
+						"description": "Gives the cheese to a player.",
+						"type": "function"
+					},
+					"giveConsumables": {
+						"args": "playerName, consumableId, amount",
+						"description": "Gives consumables to the targeted player.",
+						"type": "function"
+					},
+					"giveMeep": {
+						"args": "playerName",
+						"description": "Gives the meep competence to a player.",
+						"type": "function"
+					},
+					"killPlayer": {
+						"args": "playerName",
+						"description": "Kills the selected player.",
+						"type": "function"
+					},
+					"lowerSyncDelay": {
+						"args": "playerName",
+						"description": "Lowers the synchronization delay of a player to 400ms max.",
+						"type": "function"
+					},
+					"moveObject": {
+						"args": "objectId, xPosition, yPosition, positionOffset, xSpeed, ySpeed, speedOffset, angle, angleOffset",
+						"description": "Defines the speed and position of an object.",
+						"type": "function"
+					},
+					"movePlayer": {
+						"args": "playerName, xPosition, yPosition, positionOffset, xSpeed, ySpeed, speedOffset",
+						"description": "Defines the speed and position of a player.",
+						"type": "function"
+					},
+					"newGame": {
+						"args": "mapCode, flipped",
+						"description": "Launch a new game. Use : 6 (vanilla map), @42583 (editor map), *#4 (perm category map), begin with '<' (xml map)",
+						"type": "function"
+					},
+					"playEmote": {
+						"args": "playerName, emoteId, emoteArg",
+						"description": "Respawn a player.",
+						"type": "function"
+					},
+					"playerVictory": {
+						"args": "playerName",
+						"description": "Gives the victory to a player.",
+						"type": "function"
+					},
+					"removeImage": {
+						"args": "imageId",
+						"description": "Remove an image.",
+						"type": "function"
+					},
+					"removeObject": {
+						"args": "objectId",
+						"description": "Remove a shaman object.",
+						"type": "function"
+					},
+					"removePhyschicObject": {
+						"args": "objectId",
+						"description": "Remove a physical object.",
+						"type": "function"
+					},
+					"respawnPlayer": {
+						"args": "playerName",
+						"description": "Respawn a player.",
+						"type": "function"
+					},
+					"setAutoMapFlipMode": {
+						"args": "activate",
+						"description": "Sets whether the following maps should be flipped (always, never, or TFM's default behaviour).",
+						"type": "function"
+					},
+					"setGameTime": {
+						"args": "seconds, init",
+						"description": "Set the game time.",
+						"type": "function"
+					},
+					"setNameColor": {
+						"args": "playerName, color",
+						"description": "Changes the player's name's color.",
+						"type": "function"
+					},
+					"setPlayerScore": {
+						"args": "playerName, score, add",
+						"description": "Set the player's score.",
+						"type": "function"
+					},
+					"setRoomMaxPlayers": {
+						"args": "maxPlayers",
+						"description": "Sets the max number of players in a room. 50 by default.",
+						"type": "function"
+					},
+					"setRoomPassword": {
+						"args": "password",
+						"description": "Password-protects a room.",
+						"type": "function"
+					},
+					"setShaman": {
+						"args": "playerName",
+						"description": "Set a shaman.",
+						"type": "function"
+					},
+					"setUIMapName": {
+						"args": "text",
+						"description": "Set text map name.",
+						"type": "function"
+					},
+					"setUIShamanName": {
+						"args": "text",
+						"description": "Set text shaman name.",
+						"type": "function"
+					},
+					"setVampirePlayer": {
+						"args": "playerName",
+						"description": "Set player as vampire.",
+						"type": "function"
+					},
+					"snow": {
+						"args": "secondes, snowballPower",
+						"description": "Makes the snow fall.",
+						"type": "function"
+					}
+				}
+			},
+			"get": {
+				"type": "package",
+				"name": "get",
+				"content": {
+					"misc": {
+						"type": "package",
+						"name": "misc",
+						"content": {
+							"apiVersion": {
+								"args": "Return api version",
+								"type": "attribute"
+							},
+							"bouboumVersion": {
+								"args": "Return bouboum version",
+								"type": "attribute"
+							},
+							"transformiceVersion": {
+								"args": "Return transformice version",
+								"type": "attribute"
+							}
+						}
+					},
+					"room": {
+						"type": "package",
+						"name": "room",
+						"content": {
+							"community": {
+								"args": "Return current community",
+								"type": "attribute"
+							},
+							"currentMap": {
+								"args": "Return current map",
+								"type": "attribute"
+							},
+							"maxPlayers": {
+								"args": "Return current players limit",
+								"type": "attribute"
+							},
+							"name": {
+								"args": "Return name",
+								"type": "attribute"
+							},
+							"objectList": {
+								"args": "Return list of objects",
+								"type": "attribute"
+							},
+							"playerList": {
+								"args": "Return list of players",
+								"type": "attribute"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
