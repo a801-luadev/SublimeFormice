@@ -1,105 +1,115 @@
-import sublime, sublime_plugin, os, re, threading
-from os.path import basename
 import json
-import sys
+import re
+import sublime, sublime_plugin
+
+from .utils import is_lua, levenshtein
+
 #
 # Method Class
 #
-class Funct:
-	name = ""
-	arguments = ""
-	description = ""
-	def __init__(self, function_name, language_string):
-		self.name        = function_name
-		self.arguments   = str(language_string["args"])
-		self.description = language_string["description"]
-	def name(self):
-		return self.name
+class Func:
+	def __init__(self, name, data):
+		self.name = name
+		self.description = data.get('description', name)
+		self.args = data.get('args', '')
 
-	def arguments(self):
-		return self.arguments
+	@property
+	def completion(self):
+		return '\t'.join((self.name, self.args)), self.description
 
-	def description(self):
-		return self.description
+	def match(self, name):
+		return self.levenshtein(name)<.2
+
+	def levenshtein(self, name):
+		return levenshtein(self.name, name)
+
+def get_tree_functions(tree):
+	return (f if isinstance(f, Func) else Func(name, dict(args='package')) for name, f in tree.items())
+
 #
 # TFM helpers
 #
 class TFM:
-	transformice_func     = []
-	transformice_func_lst = []
-	transformice_obj      = []
-	transformice_obj_lst  = []
-	transformice_methods  = []
-	settings              = None
-	transformice_api_data = None
+	settings = {}
+	tree = {}
+	functions = []
+
 	def __init__(self):
 		try:
-			self.settings = sublime.load_settings("SublimeFormice.sublime-setting")
-			self.transformice_api_data = sublime.load_settings(self.settings.get("language", "en") + "-SublimeFormice.sublime-language")
+			TFM.settings = sublime.load_settings("SublimeFormice.sublime-setting")
+			lang = TFM.settings.get("language", "en")
+
+			raw = sublime.load_resource("Packages/SublimeFormice/{}-SublimeFormice.sublime-language".format(lang))
+			TFM.functions = []
+			TFM.tree = self.build_tree(json.loads(raw))
 		except Exception as e:
 			print(e)
-		if self.transformice_api_data != "":
-			list_of_func = get_json(self.transformice_api_data.get("functions"))
-			for function_name in list_of_func:
-				funcType = list_of_func[function_name]
-				try:
-					list_of_func[function_name]["type"]
-				except KeyError:
-					print("Unknown type: %s" % list_of_func[function_name])
-				else:
-					if list_of_func[function_name]["type"] == "function":
-						self.add_function(function_name, list_of_func[function_name])
-					if list_of_func[function_name]["type"] == "method":
-						self.add_method(function_name, list_of_func[function_name])
 
-	def add_function(self, function_name, language_string):
-		self.transformice_func.append( Funct( function_name, language_string ) )
+	def build_tree(self, data):
+		tree = {}
+		for name, value in data.items():
+			type = value.get("type", None)
+			if type == "function":
+				tree[name] = Func(name, value)
+				TFM.functions.append(tree[name])
+			elif type == "attribute":
+				tree[name] = Func(name, value)
+			elif type == "package":
+				tree[name] = self.build_tree(value.get('content', {}))
+			else:
+				raise TypeError("The sublime-language file's format is invalid. Invalid type: {}.".format(type))
 
-	def add_object(self, function_name, language_string):
-		self.transformice_obj.append( Obj( function_name, language_string ) )
+		return tree
 
-	def add_method(self, function_name, language_string):
-		self.transformice_methods.append( Funct( function_name, language_string ) )
+	def get_autocomplete(self, word, path=None):
+		if path is None:
+			return [f.completion for f in self.functions if f.match(word)]
 
+		tree = TFM.tree
+		for name in path[:-1]:
+			if isinstance(tree, Func) or name not in tree:
+				return
+			tree = tree[name]
 
-	def get_autocomplete(self, word):
-		autocomplete_list = []
+		word = path[-1]
+		completions = []
 
-		for function_name in self.transformice_func:
-			if word in function_name.name:
-				method_str_to_append = function_name.name + '(' + function_name.arguments+ ')'
-				method_file_location = function_name.description
-				autocomplete_list.append(("{0:70}\t{0}".format(method_str_to_append, method_file_location),method_str_to_append))
-		for function_name in self.transformice_methods:
-			if word in function_name.name:
-				method_str_to_append = function_name.name
-				method_file_location = function_name.description
-				autocomplete_list.append(("{0:70}\t{1}".format(method_str_to_append, method_file_location),method_str_to_append))
+		if word == '':
+			completions = [f.completion for f in get_tree_functions(tree)]
+		elif isinstance(tree.get(word), dict):
+			completions = [f.completion for f in get_tree_functions(tree)]
+		elif isinstance(tree.get(word), Func):
+			completions = [tree[word].completion]
+		else:
+			completions = [f.completion for f in get_tree_functions(tree) if f.match(word)]
 
-		return autocomplete_list
-
-def is_lua(view, position=None):
-	if view is None:
-		return False
-
-	# get the position of the carret
-	if position is None:
-		try:
-			position = view.sel()[0].begin()
-		except:
-			return False
-
-	return view.match_selector(position, 'source.lua')
-
-def get_json(s_string):
-	return json.loads(json.dumps(s_string))
+		if len(completions):
+			completions.sort()
+			return completions, sublime.INHIBIT_EXPLICIT_COMPLETIONS
 
 
 class SublimeFormiceEvent(TFM, sublime_plugin.EventListener):
-
 	def on_query_completions(self, view, prefix, locations):
-		completions = []
-		if is_lua(view, position=locations[0] if len(locations) else None):
-			return self.get_autocomplete(prefix)
-			completions.sort()
-		return (completions,sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+		position = locations[0] if len(locations) else None
+
+		if not is_lua(view, position):
+			return
+
+		line = view.substr(view.line(position))
+		pos = view.rowcol(position)[1]
+
+		amatch = re.match(r'^([\w.]+).*?$', line[pos:], re.M)
+		bmatch = re.match(r'^.*?([\w.]+)$', line[:pos], re.M)
+
+		result = ''
+		if bmatch is not None:
+			result += bmatch.group(1)
+		if amatch is not None:
+			result += amatch.group(1)
+
+		path = [node for node in result.split('.')]
+
+		if len(path) and path[-1]=='':
+			path = [node for node in path if node] + ['']
+
+		return self.get_autocomplete(prefix, path)
